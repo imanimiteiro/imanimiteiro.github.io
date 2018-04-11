@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Story Choices</title>
+		
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+		
+		<script>
+
+		var path = "story.txt";
+		$(document).ready(function() {
+			$.get(path, function(data, status){
+				showtext(data);
+				$('#sortable').DataTable({
+					"order": [[0,"desc"],[1,"asc"]],
+					fixedHeader: {header: true},
+					paging: false,
+					"stripeClasses": [],
+					"autoWidth": false,
+					"columnDefs": [{
+						"targets": [ 0 ],
+						"visible": false,
+						"searchable": false
+						},{
+						"targets": [ 1,2,3 ],
+						"visible": true,
+						"orderable": true,
+						},{
+						"targets": '_all',
+						"orderable": false
+						}],
+					});
+			});
+		});
+
+		function showtext(data) {
+			str = "";
+			data_row = data.split("\n");
+			for (i = 0;i < data_row.length-1;i++) {
+				data_col = data_row[i].split("\t");
+				var t = Date.parse(data_col[0]);
+				if (t > 4000000000000)
+					continue;
+				if (data_col[6] == "" || data_col[3] == "x")
+					continue;
+				str += "<tr><td>" + data_col[0] + "</td><td class="+data_col[4]+">" + data_col[1] + "</td><td class="+data_col[4]+">" + data_col[2] + "</td><td class="+data_col[4]+">" + data_col[3] + "</td><td class="+data_col[4]+">&#9733;" + data_col[5] + "</td>";
+				var level0 = ['1','8','12','16','24','32'];
+				var level = [];
+				if (data_col[5] == 3)
+					level = [1,8,24];
+				else if (data_col[5] == 4)
+					level = [1,12,24,32];
+				else
+					level = [1,8,16,24,32];
+				var idx = 0;
+				for (j = 0;j < 6;j++) {
+					if (level0[j] == level[idx] && data_col[6] != "") {
+						for (k = 0;k < 3;k++) {
+							bulk = data_col[7+4*idx+k];
+							vals = bulk.split("+");
+							str += "<td class='"+vals[0]+" c"+k+"'>" + vals[1] + "</td>";
+						}
+						idx++;
+					} else {
+						str += "<td class='K c0'></td><td class='K c1'></td><td class='K c2'></td>";
+					}
+				}
+				str += "</tr>";
+			}
+			document.getElementsByTagName("tbody")[0].innerHTML = str;
+		}
+		</script>
+		
+		<style>
+			.Red {
+				background-color: #F78181;
+			}
+			
+			.Green {
+				background-color: #9FF781;
+			}
+			
+			.Blue {
+				background-color: #82CAFA;
+			}
+			
+			.Yellow {
+				background-color: #F3F781;
+			}
+			
+			.Purple {
+				background-color: #F781D8;
+			}
+			
+			.N {
+				color: #FFFFFF;
+				text-align: center;
+			}
+			
+			.K {
+				background-color: #AAAAAA;
+			}
+			
+			.P {
+				background-color: #FFB6C1;
+				text-align: center;
+			}
+			
+			.B {
+				background-color: #ADD8E6;
+				text-align: center;
+			}
+			
+			.c0 {
+				border-left-style: solid;
+				border-left-color: black;
+				width: 30px;
+			}
+			
+			.c1 {
+				width: 30px;
+			}
+			
+			.c2 {
+				border-right-style: solid;
+				border-right-color: black;
+				width: 30px;
+			}
+		</style>
+		
+	</head>
+	
+	<body>
+
+        <div id="container-fluid">
+			<center>
+			<h2>欅のキセキ カードストーリー選択肢</h2>
+			<h2>KeyakiNoKiseki Card Story Choices</h2>
+			</center>
+			<table id="sortable" class="cell-border">
+				<thead>
+					<tr>
+						<th rowspan=2>Date</th>
+						<th rowspan=2>Set</th>
+						<th rowspan=2>JP Name</th>
+						<th rowspan=2>EN Name</th>
+						<th rowspan=2>Star</th>
+						<th colspan=3>Lv 1</th>
+						<th colspan=3>Lv 8</th>
+						<th colspan=3>Lv 12</th>
+						<th colspan=3>Lv 16</th>
+						<th colspan=3>Lv 24</th>
+						<th colspan=3>Lv 32</th>
+					</tr>
+					<tr>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+						<th>&uarr;</th>
+						<th>&rarr;</th>
+						<th>&darr;</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+    </body>
+</html>

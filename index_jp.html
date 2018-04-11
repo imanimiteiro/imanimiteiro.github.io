@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Card Database</title>
+
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+		
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<style>
+			.Red {
+				background-color: #F78181;
+			}
+			
+			.Green {
+				background-color: #9FF781;
+			}
+			
+			.Blue {
+				background-color: #82CAFA;
+			}
+			
+			.Yellow {
+				background-color: #F3F781;
+			}
+			
+			.Purple {
+				background-color: #F781D8;
+			}
+			
+			.White {
+				background-color: #FFFFFF;
+			}
+			
+			.Gray {
+				background-color: #EEEEEE;
+			}
+			
+			.Toki {
+				background-color: #FFB6C1;
+			}
+			
+			.Kira {
+				background-color: #ADD8E6;
+			}
+			
+			.hide {
+				display: none;
+			}
+			
+			.det {
+				text-indent: 10px;
+			}
+			.det2 {
+				text-indent: 20px;
+			}
+			
+		</style>
+
+		<script>
+
+		var path = "data_raw.txt";
+		$(document).ready(function() {
+			$.get(path, function(data, status){
+				showtext(data);
+				$('#sortable').DataTable({
+					"order": [[0,"desc"],[1,"asc"]],
+					fixedHeader: {header: true},
+					paging: false,
+					"stripeClasses": [],
+					"autoWidth": false,
+					"columnDefs": [{
+						"targets": [ 0 ],
+						"visible": false,
+						"searchable": false
+						},{
+						"targets": [ 8 ],
+						"visible": true,
+						"orderable": false,
+						}]
+					});
+			});
+		});
+	
+		function showtext(data) {
+			str = "";
+			data_row = data.split("\n");
+			for (i = 0;i < data_row.length-1;i++) {
+				data_col = data_row[i].split("\t");
+				var t = Date.parse(data_col[0]);
+				
+				if (t > 4000000000000)
+					continue;
+					
+				var tdc = "<td class=" + data_col[5] + ">";
+				var tdc2 = "</td>" + tdc;
+				
+				str += "<tr>" + tdc + Date.parse(data_col[0]) + tdc2 + data_col[1] + tdc2 + data_col[2] + tdc2 + data_col[3] + tdc2 + "&#9733;" + data_col[4] + tdc2 + data_col[5] + tdc2 + data_col[10] + tdc2 + "<div class='White det'>" + data_col[11] + "</div><div class='Kira det'>" + data_col[17] + "</div><div class='Toki det'>" + data_col[23] + "</div>" + tdc2 + "<button type=button class='btn btn-info btn-lg' data-toggle='modal' data-target='#card"+i+"'>Detail</button></td></tr>";
+								
+			}
+			document.getElementsByTagName("tbody")[0].innerHTML = str;
+			
+			for (i = 0;i < data_row.length-1;i++) {
+				data_col = data_row[i].split("\t");
+				var t = Date.parse(data_col[0]);
+				if (t > 4000000000000 || t > Date.now())
+					continue;
+					
+				str = "<div class='modal fade' id='card"+i+"' role=dialog><div class='modal-dialog'><div class='modal-content'><div class='modal-body "+data_col[5]+"'>";
+				rarity = parseInt(data_col[4]);
+				for (j = 0;j < rarity;j++)
+					str += "&#9733;";
+				str += data_col[1] + data_col[2] + " " + data_col[3] + "<div class='Gray det'>Active Skill:";
+				for (j = 6;j < 11;j++)
+					str += "<div class=det2>SL" + (j-5) + ": " + data_col[j] + "</div>";
+				str += "</div><div class='White det'>Bonus:";
+				for (j = 11;j < 12+rarity;j++)
+					str += "<div class=det2>" + data_col[j] + "</div>";
+				str += "</div><div class='Kira det'>Kirameki:";
+				for (j = 17;j < 18+rarity && j < 22;j++)
+					str += "<div class=det2>" + data_col[j] + "</div>";
+				str += "</div><div class='Toki det'>Tokimeki:";
+				for (j = 23;j < 24+rarity && j < 28;j++)
+					str += "<div class=det2>" + data_col[j] + "</div>";
+				str += "</div></div></div></div></div>";
+				$("body").append(str);
+			}
+		}
+		
+		</script>
+
+    </head>
+    <body>
+
+        <div id="container-fluid">
+			<center>
+			<h2>欅のキセキ JP Database</h2>
+			<p>カード図鑑</p>
+			</center>
+			<table id="sortable" class="row-border">
+				<thead>
+					<tr>
+						<th>Epoch</th>
+						<th>Set</th>
+						<th>JP Name</th>
+						<th>EN Name</th>
+						<th>Star</th>
+						<th>Color</th>
+						<th>Max Skill (Charge)</th>
+						<th>Bonus</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+    </body>
+</html>
