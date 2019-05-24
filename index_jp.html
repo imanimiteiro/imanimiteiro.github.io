@@ -101,11 +101,11 @@
 				var tdc = "<td class=" + data_col[5] + ">";
 				var tdc2 = "</td>" + tdc;
 				
-				str += "<tr>" + tdc + Date.parse(data_col[0]) + tdc2 + data_col[1] + tdc2 + data_col[2] + tdc2 + data_col[3] + tdc2 + "&#9733;" + data_col[4] + tdc2 + data_col[5] + tdc2 + data_col[10] + tdc2 + "<div class='White det'>" + data_col[11] + "</div><div class='Kira det'>" + data_col[17] + "</div><div class='Toki det'>" + data_col[23] + "</div>" + tdc2 + "<button type=button class='btn btn-info btn-lg' data-toggle='modal' data-target='#card"+i+"'>Detail</button></td></tr>";
+				str += "<tr>" + tdc + Date.parse(data_col[0]) + tdc2 + data_col[1] + tdc2 + data_col[2] + tdc2 + data_col[3] + tdc2 + "&#9733;" + data_col[4] + tdc2 + data_col[5] + tdc2 + data_col[10] + tdc2 + "<div class='White det'>" + data_col[11] + "</div><div class='Kira det'>" + data_col[17] + "</div><div class='Toki det'>" + data_col[23] + "</div></td></tr>";
 								
 			}
 			document.getElementsByTagName("tbody")[0].innerHTML = str;
-			
+			/*
 			for (i = 0;i < data_row.length-1;i++) {
 				data_col = data_row[i].split("\t");
 				var t = Date.parse(data_col[0]);
@@ -130,7 +130,7 @@
 					str += "<div class=det2>" + data_col[j] + "</div>";
 				str += "</div></div></div></div></div>";
 				$("body").append(str);
-			}
+			}*/
 		}
 		
 		</script>
